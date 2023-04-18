@@ -1,3 +1,5 @@
+// app.component.ts
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,17 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  title = 'segments';
-
   ngOnInit(): void {
     this.replaceSpansWithHeadings();
     this.colorTextEvery3500Chars();
-    const charCount = this.colorTextEvery3500Chars();
-    console.log(`Total characters: ${charCount}`);
   }
+
   private replaceSpansWithHeadings(): void {
     const paragraphs = document.querySelectorAll('p > span.c4');
-
     paragraphs.forEach((span) => {
       const heading = document.createElement('h3');
       heading.innerHTML = span.innerHTML;
@@ -58,5 +56,16 @@ export class AppComponent implements OnInit {
         }
       }
     });
+  }
+
+  countSelectedChars(): number {
+    const selection = window.getSelection();
+    if (!selection || !selection.toString()) {
+      console.warn('No text selected.');
+      return 0;
+    }
+
+    const selectedText = selection.toString();
+    return selectedText.length;
   }
 }
