@@ -8,18 +8,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  selectedCharCount = 0;
+
   ngOnInit(): void {
     this.replaceSpansWithHeadings();
     this.colorTextEvery3500Chars();
   }
 
-  private replaceSpansWithHeadings(): void {
+  replaceSpansWithHeadings(): void {
+    // Select all <p> elements that contain a <span class="c4">
     const paragraphs = document.querySelectorAll('p > span.c4');
+
+    // Iterate over the selected elements and replace each <span> with an <h3>
     paragraphs.forEach((span) => {
       const heading = document.createElement('h3');
       heading.innerHTML = span.innerHTML;
-      if (span.parentNode) {
-        span.parentNode.replaceChild(heading, span);
+
+      // Remove the parent <p> element if it contains a <span class="c4">
+      const parent = span.parentElement;
+      if (parent && parent.tagName === 'P') {
+        parent.replaceWith(heading);
+      } else {
+        span.replaceWith(heading);
       }
     });
   }
@@ -58,14 +68,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-  countSelectedChars(): number {
+  logSelectedCharCount(): void {
     const selection = window.getSelection();
-    if (!selection || !selection.toString()) {
+    if (selection) {
+      const selectedText = selection.toString();
+      console.log(`Selected ${selectedText.length} characters.`);
+    } else {
       console.warn('No text selected.');
-      return 0;
     }
-
-    const selectedText = selection.toString();
-    return selectedText.length;
   }
 }

@@ -3646,7 +3646,7 @@
     </style>
   </head>
   <body class="c17 doc-content">
-    <div (mouseup)="countSelectedChars()">
+    <div (mouseup)="logSelectedCharCount()">
       <ol class="c18 lst-kix_mvcy7smgz2a3-1 start" start="1">
         <li class="c8 li-bullet-0">
           <span class="c11">The King Dreams of World Empires</span>
@@ -5297,6 +5297,8 @@
       </p>
       <p class="c16"><span class="c19"></span></p>
     </div>
+    <div>Selected {{ selectedCharCount }} characters.</div>
+
     <script>
       function countCharsInParagraphs() {
         let totalChars = 0;
