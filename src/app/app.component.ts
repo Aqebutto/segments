@@ -10,14 +10,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.replaceSpansWithHeadings();
-    const charCount = this.countCharsInParagraphs();
+    this.colorTextEvery3500Chars();
+    const charCount = this.colorTextEvery3500Chars();
     console.log(`Total characters: ${charCount}`);
   }
-  replaceSpansWithHeadings(): void {
-    // Select all <p> elements that contain a <span class="c4">
+  private replaceSpansWithHeadings(): void {
     const paragraphs = document.querySelectorAll('p > span.c4');
 
-    // Iterate over the selected elements and replace each <span> with an <h3>
     paragraphs.forEach((span) => {
       const heading = document.createElement('h3');
       heading.innerHTML = span.innerHTML;
@@ -27,96 +26,36 @@ export class AppComponent implements OnInit {
     });
   }
 
-  // countCharsInParagraphs(): void {
-  //   let charCount = 0;
-  //   let backgroundIndex = 0;
-  //   const backgroundColors = ['#ff9999', '#99ff99', '#9999ff', '#ffff99'];
-  //   const paragraphs = document.querySelectorAll(
-  //     'p:not(:has(span.c4)):not(:has(h3))'
-  //   );
-
-  //   paragraphs.forEach((p) => {
-  //     const textContent = p.textContent;
-  //     if (!textContent) {
-  //       return;
-  //     }
-
-  //     const chunks = textContent.split('');
-
-  //     let currentChunk = '';
-  //     chunks.forEach((chunk) => {
-  //       if (chunk === '<' || chunk === '>') {
-  //         return;
-  //       }
-
-  //       currentChunk += chunk;
-  //       charCount++;
-
-  //       if (charCount % 3500 === 0) {
-  //         const backgroundColor =
-  //           backgroundColors[backgroundIndex % backgroundColors.length];
-  //         const newChunk = `<span style="background-color: ${backgroundColor};">${currentChunk}</span>`;
-  //         p.innerHTML = p.innerHTML.replace(currentChunk, newChunk);
-  //         currentChunk = '';
-  //         backgroundIndex++;
-  //       }
-  //     });
-
-  //     if (currentChunk) {
-  //       const backgroundColor =
-  //         backgroundColors[backgroundIndex % backgroundColors.length];
-  //       const newChunk = `<span style="background-color: ${backgroundColor};">${currentChunk}</span>`;
-  //       p.innerHTML = p.innerHTML.replace(currentChunk, newChunk);
-  //       backgroundIndex++;
-  //     }
-  //   });
-  // }
-  countCharsInParagraphs(): void {
-    let charCount = 0;
-    let chunkCount = 0;
-    const paragraphs = document.querySelectorAll(
-      'p:not(:has(span.c4)):not(:has(h3))'
-    );
+  private colorTextEvery3500Chars(): void {
+    const paragraphs = document.querySelectorAll('p:not(:has(span.c4))');
+    let backgroundIndex = 0;
 
     paragraphs.forEach((p) => {
-      const textContent = p.textContent;
-      if (!textContent) {
+      let text = p.textContent;
+      if (text === null || text === undefined) {
         return;
       }
 
-      const chunks = textContent.split('');
+      let remainingChars = text.length;
 
-      let currentChunk = '';
-      let currentChunkIndex = 0;
-      chunks.forEach((chunk) => {
-        if (chunk === '<' || chunk === '>') {
-          return;
+      while (remainingChars > 0) {
+        const charsToCount = Math.min(remainingChars, 3500);
+        remainingChars -= charsToCount;
+
+        if (remainingChars === 0) {
+          const backgroundColors = ['#ff9999', '#99ff99', '#9999ff', '#ffff99'];
+          (p as HTMLElement).style.backgroundColor =
+            backgroundColors[backgroundIndex % backgroundColors.length];
+          backgroundIndex++;
         }
 
-        currentChunk += chunk;
-        charCount++;
+        const textNode = document.createTextNode(text.substr(0, charsToCount));
+        p.insertBefore(textNode, p.firstChild);
+        text = text.slice(charsToCount);
 
-        if (charCount % 3500 === 0) {
-          const backgroundColor = `background-color: rgba(255, 255, 255, ${
-            chunkCount % 2 === 0 ? 0.5 : 0.6
-          })`;
-          const newChunk = `<span style="${backgroundColor};">${currentChunk}</span>`;
-          p.innerHTML = p.innerHTML.replace(currentChunk, newChunk);
-          currentChunk = '';
-          currentChunkIndex = 0;
-          chunkCount++;
-        } else {
-          currentChunkIndex++;
+        if (text === null || text === undefined) {
+          break;
         }
-      });
-
-      if (currentChunk) {
-        const backgroundColor = `background-color: rgba(255, 255, 255, ${
-          chunkCount % 2 === 0 ? 0.5 : 0.6
-        })`;
-        const newChunk = `<span style="${backgroundColor};">${currentChunk}</span>`;
-        p.innerHTML = p.innerHTML.replace(currentChunk, newChunk);
-        chunkCount++;
       }
     });
   }

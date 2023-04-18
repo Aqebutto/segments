@@ -5264,5 +5264,22 @@
       >
     </p>
     <p class="c16"><span class="c19"></span></p>
+    <script>
+      function countCharsInParagraphs() {
+        let totalChars = 0;
+        const paragraphs = document.querySelectorAll("p:not(:has(span.c4))");
+
+        paragraphs.forEach((p) => {
+          const text = p.textContent;
+          if (!text) {
+            return;
+          }
+
+          totalChars += text.length;
+        });
+
+        return totalChars;
+      }
+    </script>
   </body>
 </html>
