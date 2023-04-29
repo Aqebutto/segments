@@ -25,3 +25,37 @@ h3 {
     padding-bottom: 0.25rem;
   }
 }
+.non-h3 {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+}
+/* Style for the hide H3 button */
+.mat-raised-button.hide-button {
+  background-color: #f44336; /* Change this to your desired color */
+  color: white;
+  font-size: 14px;
+  padding: 8px 24px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 8px;
+}
+
+.mat-raised-button.hide-button:hover {
+  background-color: #e53935; /* Change this to your desired color */
+}
+
+/* Style for the show H3 button */
+.mat-raised-button.show-button {
+  background-color: #2196f3; /* Change this to your desired color */
+  color: white;
+  font-size: 14px;
+  padding: 8px 24px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mat-raised-button.show-button:hover {
+  background-color: #1976d2; /* Change this to your desired color */
+}

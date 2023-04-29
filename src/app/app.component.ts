@@ -1,6 +1,7 @@
 // app.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   selectedCharCount = 0;
+  isDrawerOpened = true;
+  @ViewChild('drawer') drawer!: MatDrawer;
 
   ngOnInit(): void {
     this.replaceSpansWithHeadings();
-    this.colorTextEvery3500Chars();
+    // this.colorTextEvery3500Chars();
+    // this.applyNonH3Font();
   }
 
   replaceSpansWithHeadings(): void {
@@ -31,6 +35,21 @@ export class AppComponent implements OnInit {
       } else {
         span.replaceWith(heading);
       }
+    });
+  }
+  openDrawer(): void {
+    this.drawer.open();
+  }
+  hideH3(): void {
+    const headings = document.querySelectorAll('h3');
+    headings.forEach((heading) => {
+      heading.style.display = 'none';
+    });
+  }
+  showH3(): void {
+    const headings = document.querySelectorAll('h3');
+    headings.forEach((heading) => {
+      heading.style.display = 'block';
     });
   }
 
@@ -76,5 +95,11 @@ export class AppComponent implements OnInit {
     } else {
       console.warn('No text selected.');
     }
+  }
+  applyNonH3Font(): void {
+    const paragraphs = document.querySelectorAll('p:not(h3)');
+    paragraphs.forEach((p) => {
+      p.classList.add('non-h3');
+    });
   }
 }
